@@ -217,12 +217,19 @@ def draw_boxes(img, bbox, names,object_id, identities=None, offset=(0, 0)):
             cv2.line(img, data_deque[id][i - 1], data_deque[id][i], color, thickness)
     
     #4. Display Count in top right corner
+        cap = cv2.VideoCapture(file_path)
+        video_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS))
+        total_entering = sum(object_counter1.values())
+        total_leaving = sum(object_counter.values())
+        avg_entering = total_entering / video_length
+        avg_leaving = total_leaving / video_length    
         for idx, (key, value) in enumerate(object_counter1.items()):
             cnt_str = str(key) + ":" +str(value)
             cv2.line(img, (width - 500,25), (width,25), [85,45,255], 40)
             cv2.putText(img, f'Number of Vehicles Entering', (width - 500, 35), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)
             cv2.line(img, (width - 150, 65 + (idx*40)), (width, 65 + (idx*40)), [85, 45, 255], 30)
             cv2.putText(img, cnt_str, (width - 150, 75 + (idx*40)), 0, 1, [255, 255, 255], thickness = 2, lineType = cv2.LINE_AA)
+            cv2.putText(img, f'Entering: {avg_entering:.2f} veh/s', (int(width*4/6), int(height*4/5)), 0, 1, [255, 255, 255], thickness=2, lineType=cv2.LINE_AA)
 
         for idx, (key, value) in enumerate(object_counter.items()):
             cnt_str1 = str(key) + ":" +str(value)
@@ -230,6 +237,7 @@ def draw_boxes(img, bbox, names,object_id, identities=None, offset=(0, 0)):
             cv2.putText(img, f'Numbers of Vehicles Leaving', (11, 35), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)    
             cv2.line(img, (20,65+ (idx*40)), (127,65+ (idx*40)), [85,45,255], 30)
             cv2.putText(img, cnt_str1, (11, 75+ (idx*40)), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)
+            cv2.putText(img, f'Leaving: {avg_leaving:.2f} veh/s', (int(width*1/8), int(height*4/5)), 0, 1, [255, 255, 255], thickness=2, lineType=cv2.LINE_AA)
     
     
     
